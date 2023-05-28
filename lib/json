@@ -1,0 +1,78 @@
+{
+    "heartbeat": false,
+    "serial": {
+        "fill": "red",
+         "shape": "ring",
+          "text": "node-red:common.status.not-connected",
+           "source": {
+                "id": "b31abeee39f1305a",
+                "type": "serial in",
+                "name": "fpms com"
+                }
+    },
+    "shoreA": {
+        "name": "Shore A",
+        "image_uri": "shore_plug.png",
+        "meters": [],
+        "status": {
+            "online": false,
+            "cord_available": false,
+            "tripped": false
+        }
+    },
+    "shoreB": {
+        "name": "Shore B",
+        "image_uri": "shore_plug.png",
+        "meters": [],
+        "status": {
+            "online": false,
+            "cord_available": false,
+            "tripped": false
+        }
+    },
+    "port": {
+        "name": "port",
+        "image_uri": "generator.png",
+        "meters": [],
+        "status": {
+            "online": false
+        }
+    },
+    "stbd": {
+        "name": "stbd",
+        "image_uri": "generator.png",
+        "meters": [],
+        "status": {
+            "online": false
+        }
+    },
+    "pms": {
+        "requests": {
+            "transfer_to_shore": false,
+            "transfer_to_gen": false,
+            "abort_transfer": false,
+            "set_port_as_priority": false,
+            "set_stbd_as_priority": false
+        },
+        "feedback": {
+            "bus_a_live": false,
+            "bus_b_live": false,
+            "tie_breaker_closed": false,
+            "blackout": false,
+            "inputs": [],
+            "in_progress": false,
+            "errors": [],
+            "response": ""
+        }
+    },
+    "settings": {
+        "modes": [],
+        "logs": []
+    },
+    "mobile_app": {
+        "connected": true,
+        "token": "",
+        "email": "",
+        "passqord": ""
+    }
+}
