@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fpms/config/bloc/config_bloc.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:scan/scan.dart';
 
@@ -20,6 +21,7 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
   TextEditingController topicController = TextEditingController();
 
   String qrcode = '';
+  String config = "";
   ImagePicker picker = ImagePicker();
 
   @override
@@ -33,9 +35,10 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
   @override
   Widget build(BuildContext context) {
     final mqttBloc = BlocProvider.of<MqttBloc>(context);
+    final configBloc = BlocProvider.of<ConfigBloc>(context);
 
     return BlocBuilder<MqttBloc, MqttState>(builder: (context, message) => SingleChildScrollView(
-      child: BlocBuilder<MqttBloc, MqttState>(
+      child: BlocBuilder<ConfigBloc, ConfigState>(
         builder: (context, message) => SingleChildScrollView(
           child: Center(
             child: Container(
@@ -48,11 +51,25 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     SizedBox(height: 30,),
+                    Text("${config}"),
+                    ElevatedButton(
+                        onPressed: () async {
+                          XFile? res = await picker.pickImage(source: ImageSource.gallery);
+                          if (res != null) {
+                            String? str = await Scan.parse(res.path);
+                            if (str != null) {
+                              setState(() {
+                                const asciiDecoder = AsciiDecoder();
+                                config = asciiDecoder.convert(str.split(' ').reversed.map((item) => int.parse(item, radix: 16)).toList()).toString();
+                              });
+                            }
+                          }
+                        }, child: Text("load json config")),
                     Text("Username: ${mqttBloc.username}", style: TextStyle(fontSize: 20),),
                     Text("Password: ${mqttBloc.password}", style: TextStyle(fontSize: 20),),
                     Text("Server uri: ${mqttBloc.serverUri}", style: TextStyle(fontSize: 20),),
                     Text("Server port: ${mqttBloc.port}", style: TextStyle(fontSize: 20),),
-                    Text("Status: ${mqttBloc.status}", style: TextStyle(fontSize: 20),),
+                    Text("${mqttBloc.fpms.serial.wiresReversed ? "Please swap rs485m wires" : ""}"),
                     SizedBox(height: 30,),
                     ElevatedButton(
                       child: Text("Select Conf QR"),

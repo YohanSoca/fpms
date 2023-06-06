@@ -351,12 +351,14 @@ class PortStatus {
 }
 
 class Serial {
+  bool wiresReversed;
   String fill;
   String shape;
   String text;
   Source source;
 
   Serial({
+    required this.wiresReversed,
     required this.fill,
     required this.shape,
     required this.text,
@@ -364,12 +366,14 @@ class Serial {
   });
 
   Serial copyWith({
+    bool? wiresReversed,
     String? fill,
     String? shape,
     String? text,
     Source? source,
   }) =>
       Serial(
+        wiresReversed: wiresReversed ?? this.wiresReversed,
         fill: fill ?? this.fill,
         shape: shape ?? this.shape,
         text: text ?? this.text,
@@ -381,6 +385,7 @@ class Serial {
   String toRawJson() => json.encode(toJson());
 
   factory Serial.fromJson(Map<String, dynamic> json) => Serial(
+    wiresReversed: json["wires_reversed"],
     fill: json["fill"],
     shape: json["shape"],
     text: json["text"],
@@ -388,6 +393,7 @@ class Serial {
   );
 
   Map<String, dynamic> toJson() => {
+    "wires_reversed": wiresReversed,
     "fill": fill,
     "shape": shape,
     "text": text,
@@ -435,21 +441,17 @@ class Source {
 }
 
 class Settings {
-  List<dynamic> modes;
-  List<dynamic> logs;
+  Modes modes;
 
   Settings({
     required this.modes,
-    required this.logs,
   });
 
   Settings copyWith({
-    List<dynamic>? modes,
-    List<dynamic>? logs,
+    Modes? modes,
   }) =>
       Settings(
         modes: modes ?? this.modes,
-        logs: logs ?? this.logs,
       );
 
   factory Settings.fromRawJson(String str) => Settings.fromJson(json.decode(str));
@@ -457,13 +459,116 @@ class Settings {
   String toRawJson() => json.encode(toJson());
 
   factory Settings.fromJson(Map<String, dynamic> json) => Settings(
-    modes: List<dynamic>.from(json["modes"].map((x) => x)),
-    logs: List<dynamic>.from(json["logs"].map((x) => x)),
+    modes: Modes.fromJson(json["modes"]),
   );
 
   Map<String, dynamic> toJson() => {
-    "modes": List<dynamic>.from(modes.map((x) => x)),
-    "logs": List<dynamic>.from(logs.map((x) => x)),
+    "modes": modes.toJson(),
+  };
+}
+
+class Modes {
+  String name;
+  bool protection;
+  bool ovr;
+  bool oneTimeTransfer;
+  bool splitBus;
+  bool preferedSource;
+  bool preferedGen;
+  bool dualGen;
+  bool seamlessTransfer;
+  bool nbootsShoreA;
+  bool nbootsShoreB;
+  bool preferedSwgear;
+  bool singleShoreCombine;
+  bool splitBusAutoOff;
+
+  Modes({
+    required this.name,
+    required this.protection,
+    required this.ovr,
+    required this.oneTimeTransfer,
+    required this.splitBus,
+    required this.preferedSource,
+    required this.preferedGen,
+    required this.dualGen,
+    required this.seamlessTransfer,
+    required this.nbootsShoreA,
+    required this.nbootsShoreB,
+    required this.preferedSwgear,
+    required this.singleShoreCombine,
+    required this.splitBusAutoOff,
+  });
+
+  Modes copyWith({
+    String? name,
+    bool? protection,
+    bool? ovr,
+    bool? oneTimeTransfer,
+    bool? splitBus,
+    bool? preferedSource,
+    bool? preferedGen,
+    bool? dualGen,
+    bool? seamlessTransfer,
+    bool? nbootsShoreA,
+    bool? nbootsShoreB,
+    bool? preferedSwgear,
+    bool? singleShoreCombine,
+    bool? splitBusAutoOff,
+  }) =>
+      Modes(
+        name: name ?? this.name,
+        protection: protection ?? this.protection,
+        ovr: ovr ?? this.ovr,
+        oneTimeTransfer: oneTimeTransfer ?? this.oneTimeTransfer,
+        splitBus: splitBus ?? this.splitBus,
+        preferedSource: preferedSource ?? this.preferedSource,
+        preferedGen: preferedGen ?? this.preferedGen,
+        dualGen: dualGen ?? this.dualGen,
+        seamlessTransfer: seamlessTransfer ?? this.seamlessTransfer,
+        nbootsShoreA: nbootsShoreA ?? this.nbootsShoreA,
+        nbootsShoreB: nbootsShoreB ?? this.nbootsShoreB,
+        preferedSwgear: preferedSwgear ?? this.preferedSwgear,
+        singleShoreCombine: singleShoreCombine ?? this.singleShoreCombine,
+        splitBusAutoOff: splitBusAutoOff ?? this.splitBusAutoOff,
+      );
+
+  factory Modes.fromRawJson(String str) => Modes.fromJson(json.decode(str));
+
+  String toRawJson() => json.encode(toJson());
+
+  factory Modes.fromJson(Map<String, dynamic> json) => Modes(
+    name: json["name"],
+    protection: json["protection"],
+    ovr: json["ovr"],
+    oneTimeTransfer: json["one_time_transfer"],
+    splitBus: json["split_bus"],
+    preferedSource: json["prefered_source"],
+    preferedGen: json["prefered_gen"],
+    dualGen: json["dual_gen"],
+    seamlessTransfer: json["seamless_transfer"],
+    nbootsShoreA: json["nboots_shore_a"],
+    nbootsShoreB: json["nboots_shore_b"],
+    preferedSwgear: json["prefered_swgear"],
+    singleShoreCombine: json["single_shore_combine"],
+    splitBusAutoOff: json["split_bus_auto_off"],
+  );
+
+  Map<String, dynamic> toJson() => {
+    "name": name,
+    "protection": protection,
+    "ovr": ovr,
+    "one_time_transfer": oneTimeTransfer,
+    "split_bus": splitBus,
+    "prefered_source": preferedSource,
+    "prefered_gen": preferedGen,
+    "dual_gen": dualGen,
+    "seamless_transfer": seamlessTransfer,
+    "nboots_shore_a": nbootsShoreA,
+    "nboots_shore_b": nbootsShoreB,
+    "prefered_swgear": preferedSwgear,
+    "single_shore_combine": singleShoreCombine,
+    "split_bus_auto_off": splitBusAutoOff,
   };
 }
 

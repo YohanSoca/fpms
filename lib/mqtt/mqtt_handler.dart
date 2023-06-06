@@ -40,7 +40,7 @@ class MQTTClientManager {
       print('MQTTClient::Client exception - $e');
       client.disconnect();
     } on SocketException catch (e) {
-      respose = e as String;
+      respose = e as String;      
       print('MQTTClient::Socket exception - $e');
       client.disconnect();
     }

@@ -1,6 +1,7 @@
 {
     "heartbeat": false,
     "serial": {
+        "wires_reversed": false,
         "fill": "red",
          "shape": "ring",
           "text": "node-red:common.status.not-connected",
@@ -66,8 +67,22 @@
         }
     },
     "settings": {
-        "modes": [],
-        "logs": []
+        "modes": {
+            "name": "fpms modes",
+            "protection": false,
+            "ovr": false,
+            "one_time_transfer": false,
+            "split_bus": false,
+            "prefered_source": false,
+            "prefered_gen": false,
+            "dual_gen": false,
+            "seamless_transfer": false,
+            "nboots_shore_a": false,
+            "nboots_shore_b": false,
+            "prefered_swgear": false,
+            "single_shore_combine": false,
+            "split_bus_auto_off": false
+        }
     },
     "mobile_app": {
         "connected": true,
