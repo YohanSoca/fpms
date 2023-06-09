@@ -1,11 +1,11 @@
 // To parse this JSON data, do
 //
-//     final fpms = fpmsFromJson(jsonString);
+//     final config = configFromJson(jsonString);
 
 import 'package:meta/meta.dart';
 import 'dart:convert';
 
-class Fpms {
+class Config {
   String username;
   String email;
   String password;
@@ -14,10 +14,10 @@ class Fpms {
   int mqttServerPort;
   String mqttUsername;
   String mqttPassword;
-  List<dynamic> mqttTopics;
+  List<String> mqttTopics;
   int profile;
 
-  Fpms({
+  Config({
     required this.username,
     required this.email,
     required this.password,
@@ -30,7 +30,7 @@ class Fpms {
     required this.profile,
   });
 
-  Fpms copyWith({
+  Config copyWith({
     String? username,
     String? email,
     String? password,
@@ -39,10 +39,10 @@ class Fpms {
     int? mqttServerPort,
     String? mqttUsername,
     String? mqttPassword,
-    List<dynamic>? mqttTopics,
+    List<String>? mqttTopics,
     int? profile,
   }) =>
-      Fpms(
+      Config(
         username: username ?? this.username,
         email: email ?? this.email,
         password: password ?? this.password,
@@ -55,11 +55,11 @@ class Fpms {
         profile: profile ?? this.profile,
       );
 
-  factory Fpms.fromRawJson(String str) => Fpms.fromJson(json.decode(str));
+  factory Config.fromRawJson(String str) => Config.fromJson(json.decode(str));
 
   String toRawJson() => json.encode(toJson());
 
-  factory Fpms.fromJson(Map<String, dynamic> json) => Fpms(
+  factory Config.fromJson(Map<String, dynamic> json) => Config(
     username: json["username"],
     email: json["email"],
     password: json["password"],
@@ -68,7 +68,7 @@ class Fpms {
     mqttServerPort: json["mqtt_server_port"],
     mqttUsername: json["mqtt_username"],
     mqttPassword: json["mqtt_password"],
-    mqttTopics: List<dynamic>.from(json["mqtt_topics"].map((x) => x)),
+    mqttTopics: List<String>.from(json["mqtt_topics"].map((x) => x)),
     profile: json["profile"],
   );
 

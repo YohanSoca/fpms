@@ -2,8 +2,11 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:bloc/bloc.dart';
+import 'package:flutter/services.dart';
+import 'package:fpms/models/config_file.dart';
 import 'package:fpms/models/fpms.dart';
 import 'package:fpms/mqtt/mqtt_handler.dart';
+import 'package:http/http.dart';
 import 'package:mqtt_client/mqtt_client.dart';
 import 'package:mqtt_client/mqtt_server_client.dart';
 import 'package:uuid/uuid.dart';
@@ -53,6 +56,7 @@ class MqttBloc extends Bloc<MqttEvent, MqttState> {
         _clientManager.disconnect();
         _clientManager.client.disconnect();
       }
+
       MqttServerClient serverClient = MqttServerClient(serverUri, '');
       await _clientManager.connect(serverClient, username, password);
       status = _clientManager.respose;
@@ -114,4 +118,10 @@ class MqttBloc extends Bloc<MqttEvent, MqttState> {
     });
   }
 
+  Future<void> readJson() async {
+    final String response =
+    await rootBundle.loadString('assets/config.json');
+    final data = await json.decode(response);
+    print(data);
+  }
 }

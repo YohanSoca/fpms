@@ -31,13 +31,13 @@ class _ModesScreenState extends State<ModesScreen> {
                     margin: EdgeInsets.all(5),
                     decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(10),
-                        color: mqttBloc.fpms.settings.modes.protection ? Colors
+                        color: mqttBloc.fpms.pms.settings.modes.protection ? Colors
                             .green : Colors.grey
                     ),
                     height: 50,
                     width: double.infinity,
                     child: Center(
-                      child: Text('Protection mode: ${mqttBloc.fpms.settings.modes.protection ? 'ON' : 'OFF'}',
+                      child: Text('Protection mode: ${mqttBloc.fpms.pms.settings.modes.protection ? 'ON' : 'OFF'}',
                         style: TextStyle(fontSize: 24),),
                     )
                 ),
@@ -45,13 +45,13 @@ class _ModesScreenState extends State<ModesScreen> {
                     margin: EdgeInsets.all(5),
                     decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(10),
-                        color: mqttBloc.fpms.settings.modes.ovr ? Colors
+                        color: mqttBloc.fpms.pms.settings.modes.ovr ? Colors
                             .green : Colors.grey
                     ),
                     height: 50,
                     width: double.infinity,
                     child: Center(
-                      child: Text('OVR mode: ${mqttBloc.fpms.settings.modes.ovr ? 'ON' : 'OFF'}',
+                      child: Text('OVR mode: ${mqttBloc.fpms.pms.settings.modes.ovr ? 'ON' : 'OFF'}',
                         style: TextStyle(fontSize: 24),),
                     )
                 ),
@@ -59,13 +59,13 @@ class _ModesScreenState extends State<ModesScreen> {
                     margin: EdgeInsets.all(5),
                     decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(10),
-                        color: mqttBloc.fpms.settings.modes.oneTimeTransfer ? Colors
+                        color: mqttBloc.fpms.pms.settings.modes.oneTimeTransfer ? Colors
                             .green : Colors.grey
                     ),
                     height: 50,
                     width: double.infinity,
                     child: Center(
-                      child: Text('One Time Transfer mode: ${mqttBloc.fpms.settings.modes.oneTimeTransfer ? 'ON' : 'OFF'}',
+                      child: Text('One Time Transfer mode: ${mqttBloc.fpms.pms.settings.modes.oneTimeTransfer ? 'ON' : 'OFF'}',
                         style: TextStyle(fontSize: 24),),
                     )
                 ),
@@ -73,13 +73,13 @@ class _ModesScreenState extends State<ModesScreen> {
                     margin: EdgeInsets.all(5),
                     decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(10),
-                        color: mqttBloc.fpms.settings.modes.protection ? Colors
+                        color: mqttBloc.fpms.pms.settings.modes.protection ? Colors
                             .green : Colors.grey
                     ),
                     height: 50,
                     width: double.infinity,
                     child: Center(
-                      child: Text('Protection mode: ${mqttBloc.fpms.settings.modes.protection ? 'ON' : 'OFF'}',
+                      child: Text('Split bus: ${mqttBloc.fpms.pms.settings.modes.splitBus ? 'ON' : 'OFF'}',
                         style: TextStyle(fontSize: 24),),
                     )
                 ),
@@ -87,13 +87,13 @@ class _ModesScreenState extends State<ModesScreen> {
                     margin: EdgeInsets.all(5),
                     decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(10),
-                        color: mqttBloc.fpms.settings.modes.protection ? Colors
+                        color: mqttBloc.fpms.pms.settings.modes.protection ? Colors
                             .green : Colors.grey
                     ),
                     height: 50,
                     width: double.infinity,
                     child: Center(
-                      child: Text('Protection mode: ${mqttBloc.fpms.settings.modes.protection ? 'ON' : 'OFF'}',
+                      child: Text('Dual gen: ${mqttBloc.fpms.pms.settings.modes.dualGen ? 'ON' : 'OFF'}',
                         style: TextStyle(fontSize: 24),),
                     )
                 ),
@@ -101,13 +101,13 @@ class _ModesScreenState extends State<ModesScreen> {
                     margin: EdgeInsets.all(5),
                     decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(10),
-                        color: mqttBloc.fpms.settings.modes.protection ? Colors
+                        color: mqttBloc.fpms.pms.settings.modes.protection ? Colors
                             .green : Colors.grey
                     ),
                     height: 50,
                     width: double.infinity,
                     child: Center(
-                      child: Text('Protection mode: ${mqttBloc.fpms.settings.modes.protection ? 'ON' : 'OFF'}',
+                      child: Text('Prefered gen: ${mqttBloc.fpms.pms.settings.modes.preferedGen ? 'PORT' : 'STBD'}',
                         style: TextStyle(fontSize: 24),),
                     )
                 ),

@@ -5,7 +5,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fpms/bloc/mqtt_bloc.dart';
 import 'package:fpms/models/fpms.dart';
-import 'package:fpms/screens/categories_screen.dart';
+import 'package:fpms/screens/port_gen_screen.dart';
+import 'package:fpms/screens/setup_screen.dart';
+import 'package:fpms/screens/shore_a_screen.dart';
+import 'package:fpms/screens/shore_b_screen.dart';
 import 'package:fpms/screens/stbd_gen_screen.dart';
 import 'dart:math' as math;
 import 'package:mqtt_client/mqtt_client.dart';
@@ -120,7 +123,7 @@ class _LandscapeHomeScreenState extends State<LandscapeHomeScreen> {
                                 decoration: BoxDecoration(
                                   boxShadow: [
                                     BoxShadow(
-                                      color: mqttBloc.fpms.shoreA.meters[0] > 50
+                                      color: mqttBloc.fpms.port.meters[0] > 50
                                           ? Colors.green
                                           : Colors.grey,
                                       spreadRadius: 1,
@@ -151,15 +154,15 @@ class _LandscapeHomeScreenState extends State<LandscapeHomeScreen> {
                                               MainAxisAlignment.spaceBetween,
                                           children: [
                                             Text(
-                                              '${mqttBloc.fpms.shoreA.meters[0]} V',
+                                              '${mqttBloc.fpms.port.meters[0]} V',
                                               style: TextStyle(fontSize: 22),
                                             ),
                                             Text(
-                                              '${mqttBloc.fpms.shoreA.meters[0]} A',
+                                              '${mqttBloc.fpms.port.meters[1]} A',
                                               style: TextStyle(fontSize: 22),
                                             ),
                                             Text(
-                                              '${mqttBloc.fpms.shoreA.meters[0]} Hz',
+                                              '${mqttBloc.fpms.port.meters[1]} Hz',
                                               style: TextStyle(fontSize: 22),
                                             ),
                                           ],
@@ -179,15 +182,15 @@ class _LandscapeHomeScreenState extends State<LandscapeHomeScreen> {
                                 angle:
                                     mqttBloc.fpms.port.status.online ? 0 : 45,
                                 child: Container(
-                                  color: mqttBloc.fpms.port.status.online
+                                  color: mqttBloc.fpms.port.status.online && mqttBloc.fpms.port.meters[0] > 50
                                       ? Colors.green
                                       : Colors.grey,
                                   width: 40,
                                   height: 20,
                                 ),
                               ),
-                              Container(
-                                color: mqttBloc.fpms.port.status.online
+                              Container( // port gen drop
+                                color: mqttBloc.fpms.pms.feedback.busALive
                                     ? Colors.green
                                     : Colors.grey,
                                 height: 20,
@@ -237,11 +240,11 @@ class _LandscapeHomeScreenState extends State<LandscapeHomeScreen> {
                                               style: TextStyle(fontSize: 22),
                                             ),
                                             Text(
-                                              '${mqttBloc.fpms.shoreA.meters[0]} A',
+                                              '${mqttBloc.fpms.shoreA.meters[1]} A',
                                               style: TextStyle(fontSize: 22),
                                             ),
                                             Text(
-                                              '${mqttBloc.fpms.shoreA.meters[0]} Hz',
+                                              '${mqttBloc.fpms.shoreA.meters[2]} Hz',
                                               style: TextStyle(fontSize: 22),
                                             ),
                                           ],
@@ -251,7 +254,7 @@ class _LandscapeHomeScreenState extends State<LandscapeHomeScreen> {
                               ),
                               Container(
                                 margin: EdgeInsets.only(left: 3),
-                                color: mqttBloc.fpms.shoreA.status.online
+                                color: mqttBloc.fpms.shoreA.meters[0] > 50
                                     ? Colors.green
                                     : Colors.grey,
                                 height: 20,
@@ -261,7 +264,7 @@ class _LandscapeHomeScreenState extends State<LandscapeHomeScreen> {
                                 angle:
                                     mqttBloc.fpms.shoreA.status.online ? 0 : 45,
                                 child: Container(
-                                  color: mqttBloc.fpms.shoreA.status.online
+                                  color: mqttBloc.fpms.shoreA.status.online && mqttBloc.fpms.shoreA.meters[0] > 50
                                       ? Colors.green
                                       : Colors.grey,
                                   width: 40,
@@ -269,7 +272,7 @@ class _LandscapeHomeScreenState extends State<LandscapeHomeScreen> {
                                 ),
                               ),
                               Container(
-                                color: mqttBloc.fpms.shoreA.status.online
+                                color: mqttBloc.fpms.pms.feedback.busALive
                                     ? Colors.green
                                     : Colors.grey,
                                 height: 20,
@@ -284,7 +287,7 @@ class _LandscapeHomeScreenState extends State<LandscapeHomeScreen> {
                         width: 20,
                         height: 200,
                         child: Container(
-                          color: mqttBloc.fpms.shoreA.status.online
+                          color: mqttBloc.fpms.pms.feedback.busALive
                               ? Colors.green
                               : Colors.grey,
                           height: double.infinity,
@@ -301,7 +304,7 @@ class _LandscapeHomeScreenState extends State<LandscapeHomeScreen> {
                               width: 20,
                               height: 20,
                               child: Container(
-                                color: mqttBloc.fpms.shoreA.status.online
+                                color: mqttBloc.fpms.pms.feedback.busALive
                                     ? Colors.green
                                     : Colors.grey,
                                 height: double.infinity,
@@ -310,7 +313,7 @@ class _LandscapeHomeScreenState extends State<LandscapeHomeScreen> {
                             ),
                             Transform.rotate(
                               angle:
-                                  mqttBloc.fpms.shoreA.status.online ? 0 : 45,
+                                  mqttBloc.fpms.pms.feedback.tieBreakerClosed ? 0 : 45,
                               child: Container(
                                 color: mqttBloc.fpms.shoreA.status.online
                                     ? Colors.green
@@ -324,7 +327,7 @@ class _LandscapeHomeScreenState extends State<LandscapeHomeScreen> {
                               width: 20,
                               height: 20,
                               child: Container(
-                                color: mqttBloc.fpms.shoreA.status.online
+                                color: mqttBloc.fpms.pms.feedback.busBLive
                                     ? Colors.green
                                     : Colors.grey,
                                 height: double.infinity,
@@ -341,7 +344,7 @@ class _LandscapeHomeScreenState extends State<LandscapeHomeScreen> {
                         width: 20,
                         height: 200,
                         child: Container(
-                          color: mqttBloc.fpms.shoreA.status.online
+                          color: mqttBloc.fpms.pms.feedback.busBLive
                               ? Colors.green
                               : Colors.grey,
                           height: double.infinity,
@@ -353,7 +356,7 @@ class _LandscapeHomeScreenState extends State<LandscapeHomeScreen> {
                           Row(
                             children: [
                               Container(
-                                color: mqttBloc.fpms.shoreA.status.online
+                                color: mqttBloc.fpms.pms.feedback.busBLive
                                     ? Colors.green
                                     : Colors.grey,
                                 height: 20,
@@ -361,16 +364,17 @@ class _LandscapeHomeScreenState extends State<LandscapeHomeScreen> {
                               ),
                               Transform.rotate(
                                 angle:
-                                    mqttBloc.fpms.shoreA.status.online ? 0 : 45,
+                                    mqttBloc.fpms.stbd.status.online ? 0 : 45,
                                 child: Container(
-                                  color: Colors.grey,
+                                  color: mqttBloc.fpms.stbd.status.online && mqttBloc.fpms.stbd.meters[0] > 50
+                                      ? Colors.green : Colors.grey,
                                   width: 40,
                                   height: 20,
                                 ),
                               ),
                               Container(
                                 margin: EdgeInsets.only(right: 3),
-                                color: mqttBloc.fpms.shoreA.status.online
+                                color: mqttBloc.fpms.stbd.meters[0] > 50
                                     ? Colors.green
                                     : Colors.grey,
                                 height: 20,
@@ -381,7 +385,7 @@ class _LandscapeHomeScreenState extends State<LandscapeHomeScreen> {
                                 decoration: BoxDecoration(
                                   boxShadow: [
                                     BoxShadow(
-                                      color: mqttBloc.fpms.shoreA.status.online
+                                      color: mqttBloc.fpms.stbd.meters[0] > 50
                                           ? Colors.green
                                           : Colors.grey,
                                       spreadRadius: 1,
@@ -404,15 +408,15 @@ class _LandscapeHomeScreenState extends State<LandscapeHomeScreen> {
                                               MainAxisAlignment.spaceBetween,
                                           children: [
                                             Text(
-                                              '${mqttBloc.fpms.shoreA.meters[0]} V',
+                                              '${mqttBloc.fpms.stbd.meters[0]} V',
                                               style: TextStyle(fontSize: 22),
                                             ),
                                             Text(
-                                              '${mqttBloc.fpms.shoreA.meters[0]} A',
+                                              '${mqttBloc.fpms.stbd.meters[1]} A',
                                               style: TextStyle(fontSize: 22),
                                             ),
                                             Text(
-                                              '${mqttBloc.fpms.shoreA.meters[0]} Hz',
+                                              '${mqttBloc.fpms.stbd.meters[2]} Hz',
                                               style: TextStyle(fontSize: 22),
                                             ),
                                           ],
@@ -433,7 +437,7 @@ class _LandscapeHomeScreenState extends State<LandscapeHomeScreen> {
                           Row(
                             children: [
                               Container(
-                                color: mqttBloc.fpms.shoreA.status.online
+                                color: mqttBloc.fpms.pms.feedback.busBLive
                                     ? Colors.green
                                     : Colors.grey,
                                 height: 20,
@@ -441,9 +445,9 @@ class _LandscapeHomeScreenState extends State<LandscapeHomeScreen> {
                               ),
                               Transform.rotate(
                                 angle:
-                                    mqttBloc.fpms.shoreA.status.online ? 0 : 45,
+                                    mqttBloc.fpms.shoreB.status.online ? 0 : 45,
                                 child: Container(
-                                  color: mqttBloc.fpms.shoreA.status.online
+                                  color: mqttBloc.fpms.shoreB.status.online && mqttBloc.fpms.shoreB.meters[0] > 50
                                       ? Colors.green
                                       : Colors.grey,
                                   width: 40,
@@ -463,7 +467,7 @@ class _LandscapeHomeScreenState extends State<LandscapeHomeScreen> {
                                 decoration: BoxDecoration(
                                   boxShadow: [
                                     BoxShadow(
-                                      color: mqttBloc.fpms.shoreA.meters[0] > 50
+                                      color: mqttBloc.fpms.shoreB.meters[0] > 50
                                           ? Colors.green
                                           : Colors.grey,
                                       spreadRadius: 1,
@@ -486,15 +490,15 @@ class _LandscapeHomeScreenState extends State<LandscapeHomeScreen> {
                                               MainAxisAlignment.spaceBetween,
                                           children: [
                                             Text(
-                                              '${mqttBloc.fpms.shoreA.meters[0]} V',
+                                              '${mqttBloc.fpms.shoreB.meters[0]} V',
                                               style: TextStyle(fontSize: 22),
                                             ),
                                             Text(
-                                              '${mqttBloc.fpms.shoreA.meters[0]} A',
+                                              '${mqttBloc.fpms.shoreB.meters[1]} A',
                                               style: TextStyle(fontSize: 22),
                                             ),
                                             Text(
-                                              '${mqttBloc.fpms.shoreA.meters[0]} Hz',
+                                              '${mqttBloc.fpms.shoreB.meters[2]} Hz',
                                               style: TextStyle(fontSize: 22),
                                             ),
                                           ],
@@ -554,14 +558,14 @@ class _PortraitHomeScreenState extends State<PortraitHomeScreen> {
                 SingleChildScrollView(
                   child: Column(
                     children: [
-                      Padding(
+                      true ? Padding(
                         padding: EdgeInsets.only(top: 10),
                         child: Row(
                           children: [
                             InkWell(
                               onTap: () {
                                 Navigator.push(context,
-                                    MaterialPageRoute(builder: (context) => StbdGenScreen()));
+                                    MaterialPageRoute(builder: (context) => PortGenScreen()));
                               },
                               child: Container(
                                 margin: const EdgeInsets.only(left: 15, right: 3, top: 15),
@@ -643,8 +647,8 @@ class _PortraitHomeScreenState extends State<PortraitHomeScreen> {
                             )
                           ],
                         ),
-                      ),
-                      Padding(
+                      ): SizedBox(),
+                      true ? Padding(
                         padding: EdgeInsets.only(top: 10),
                         child: Row(
                           children: [
@@ -653,7 +657,7 @@ class _PortraitHomeScreenState extends State<PortraitHomeScreen> {
                                 Navigator.push(
                                     context,
                                     MaterialPageRoute(
-                                        builder: (context) => StbdGenScreen()));
+                                        builder: (context) => ShoreAScreen()));
                               },
                               child: Container(
                                 margin: const EdgeInsets.only(
@@ -747,8 +751,8 @@ class _PortraitHomeScreenState extends State<PortraitHomeScreen> {
                             )
                           ],
                         ),
-                      ),
-                      Padding(
+                      ): SizedBox(height: 130,),
+                      true ? Padding(
                         padding: EdgeInsets.only(top: 10),
                         child: Row(
                           children: [
@@ -837,8 +841,8 @@ class _PortraitHomeScreenState extends State<PortraitHomeScreen> {
                             )
                           ],
                         ),
-                      ),
-                      Padding(
+                      ): SizedBox(height: 130,),
+                      true ? Padding(
                         padding: EdgeInsets.only(top: 10),
                         child: Row(
                           children: [
@@ -847,7 +851,7 @@ class _PortraitHomeScreenState extends State<PortraitHomeScreen> {
                                 Navigator.push(
                                     context,
                                     MaterialPageRoute(
-                                        builder: (context) => StbdGenScreen()));
+                                        builder: (context) => ShoreBScreen()));
                               },
                               child: Container(
                                 margin: const EdgeInsets.only(
@@ -941,7 +945,7 @@ class _PortraitHomeScreenState extends State<PortraitHomeScreen> {
                             )
                           ],
                         ),
-                      )
+                      ): SizedBox(height: 130,)
                     ],
                   ),
                 ),

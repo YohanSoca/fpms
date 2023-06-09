@@ -2,7 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'package:fpms/screens/categories_screen.dart';
+import 'package:fpms/screens/setup_screen.dart';
 import 'package:fpms/screens/settings_screen.dart';
 import 'package:provider/provider.dart';
 
@@ -159,7 +159,7 @@ class _BottomNavigationWidgetState extends State<BottomNavigationWidget> {
 
   static List<Widget> _selections = [
     HomeScreen(),
-    CategoriesScreen(),
+    SetupScreen(),
     SettingScreen()
   ];
   @override

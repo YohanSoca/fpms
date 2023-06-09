@@ -13,7 +13,7 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:fpms/firebase_options.dart';
 import 'package:fpms/providers/light_dark_provider.dart';
 import 'package:fpms/screens/auth_screen.dart';
-import 'package:fpms/screens/categories_screen.dart';
+import 'package:fpms/screens/setup_screen.dart';
 import 'package:fpms/screens/home_screen.dart';
 import 'package:fpms/screens/settings_screen.dart';
 import 'package:provider/provider.dart';
@@ -191,37 +191,42 @@ class _BottomNavigationWidgetState extends State<BottomNavigationWidget> {
 
   static const List<Widget> _selections = [
     HomeScreen(),
-    CategoriesScreen(),
     SettingScreen()
   ];
   @override
   Widget build(BuildContext context) {
+    final mqttBloc = BlocProvider.of<MqttBloc>(context);
+
     final themeProvider = Provider.of<LightDarkProvider>(context);
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       theme: themeProvider.getTheme(),
-      home: SafeArea(child: Scaffold(
-          appBar: MediaQuery.of(context).orientation == Orientation.portrait ? AppBar(title: const Text('PMS'),
-            actions: [
-              IconButton(onPressed: () {
-                if(themeProvider.darkMode) {
-                  themeProvider.setLightMode();
-                } else {
-                  themeProvider.setDarkMode();
-                }
-              }, icon: themeProvider.darkMode ? Icon(Icons.light_mode) : Icon(Icons.dark_mode)),
-            ],) : null,
-          bottomNavigationBar: MediaQuery.of(context).orientation == Orientation.portrait ? BottomNavigationBar(
-            items: const [
-              BottomNavigationBarItem(icon: Icon(Icons.home), label: "Home"),
-              BottomNavigationBarItem(icon: Icon(Icons.settings), label: "Setup"),
-              BottomNavigationBarItem(icon: Icon(Icons.select_all), label: "Categories")
-            ],
-            currentIndex: _selectedIndex,
-            onTap: _onItemTapped,
-          ) : null,
-          body: _selections[_selectedIndex]
-      )),
+      home: BlocBuilder<MqttBloc, MqttState>(
+        builder: (context, message) => Scaffold(
+            appBar: MediaQuery.of(context).orientation == Orientation.portrait ? AppBar(title: const Text('PMS'),
+              actions: [
+                mqttBloc.state is MessageReceivedState ?
+                (DateTime.now().millisecondsSinceEpoch - mqttBloc.fpms.pmsServer.lastUpdate < 10000 ? Icon(Icons.link) : Icon(Icons.link_off)) : Icon(Icons.link_off),
+                SizedBox(width: 20,),
+                IconButton(onPressed: () {
+                  if(themeProvider.darkMode) {
+                    themeProvider.setLightMode();
+                  } else {
+                    themeProvider.setDarkMode();
+                  }
+                }, icon: themeProvider.darkMode ? Icon(Icons.light_mode) : Icon(Icons.dark_mode)),
+              ],) : null,
+            bottomNavigationBar: MediaQuery.of(context).orientation == Orientation.portrait ? BottomNavigationBar(
+              items: const [
+                BottomNavigationBarItem(icon: Icon(Icons.home), label: "Home"),
+                BottomNavigationBarItem(icon: Icon(Icons.select_all), label: "Categories")
+              ],
+              currentIndex: _selectedIndex,
+              onTap: _onItemTapped,
+            ) : null,
+            body: _selections[_selectedIndex]
+        ),
+      )
     );
   }
 

@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:fpms/screens/alarms_screen.dart';
+import 'package:fpms/screens/logs_screen.dart';
+import 'package:fpms/screens/setup_screen.dart';
 import '../models/settings_categories.dart';
 import '../utils/utils.dart';
 import 'developer_screen.dart';
@@ -14,11 +17,9 @@ class SettingScreen extends StatefulWidget {
 class _SettingScreenState extends State<SettingScreen> {
   final List<SettingCategory> _categories = const [
     SettingCategory(1, "Modes", "#A9CCE3"),
-    SettingCategory(2, "Developer", "#C5F0B3"),
-    SettingCategory(3, "Information", "#A9CCE3"),
-    SettingCategory(4, "Date&Time", "#C5F0B3"),
-    SettingCategory(5, "Generator", "#A9CCE3"),
-    SettingCategory(6, "Shore", "#C5F0B3")
+    SettingCategory(2, "Alarms", "#C5F0B3"),
+    SettingCategory(3, "Setup", "#A9CCE3"),
+    SettingCategory(4, "Logs", "#C5F0B3"),
   ];
   @override
   Widget build(BuildContext context) {
@@ -66,8 +67,14 @@ class TileCategory extends StatelessWidget {
     if(category.name == 'Modes') {
       Navigator.push(context, MaterialPageRoute(builder: (context) => ModesScreen()));
     }
-    if(category.name == 'Developer') {
-      Navigator.push(context, MaterialPageRoute(builder: (context) => DeveloperScreen()));
+    if(category.name == 'Alarms') {
+      Navigator.push(context, MaterialPageRoute(builder: (context) => AlarmsScreen()));
+    }
+    if(category.name == 'Setup') {
+      Navigator.push(context, MaterialPageRoute(builder: (context) => SetupScreen()));
+    }
+    if(category.name == 'Logs') {
+      Navigator.push(context, MaterialPageRoute(builder: (context) => LogsScreen()));
     }
   }
 }
