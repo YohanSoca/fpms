@@ -1,21 +1,16 @@
 import 'dart:convert';
-import 'dart:io';
-
 import 'package:bloc/bloc.dart';
 import 'package:flutter/services.dart';
-import 'package:fpms/models/config_file.dart';
 import 'package:fpms/models/fpms.dart';
 import 'package:fpms/mqtt/mqtt_handler.dart';
-import 'package:http/http.dart';
 import 'package:mqtt_client/mqtt_client.dart';
 import 'package:mqtt_client/mqtt_server_client.dart';
-import 'package:uuid/uuid.dart';
 
 part 'mqtt_event.dart';
 part 'mqtt_state.dart';
 
 class MqttBloc extends Bloc<MqttEvent, MqttState> {
-  MQTTClientManager _clientManager = MQTTClientManager();
+  final MQTTClientManager _clientManager = MQTTClientManager();
   String serverUri = "";
   String username = "";
   String password = "";
@@ -26,8 +21,14 @@ class MqttBloc extends Bloc<MqttEvent, MqttState> {
   late Fpms fpms;
   int packages_received = 0;
   String status = "";
+  String token = "";
 
   MqttBloc() : super(DisconnectedState()) {
+
+    on<UpdateTokenEvent>((event, emit) {
+      token = event.token;
+      _clientManager.publishMessage("update-token", token);
+    });
 
     on<UpdateCredentialsEvent>((event, emit) {
         username = event.username;
@@ -68,6 +69,7 @@ class MqttBloc extends Bloc<MqttEvent, MqttState> {
       if(_clientManager.client.connectionStatus!.state ==
           MqttConnectionState.connected) {
         add(ConnectedEvent());
+        add(UpdateTokenEvent(token));
       }
     });
 
@@ -79,6 +81,9 @@ class MqttBloc extends Bloc<MqttEvent, MqttState> {
       //TODO
       packages_received = packages_received + 1;
       emit(MessageReceivedState(event.message));
+      if(!(fpms.mobileApp.token.length > 0)) {
+        add(UpdateTokenEvent(token));
+      }
     });
 
     on<ConnectedEvent>((event, emit) {
@@ -122,6 +127,5 @@ class MqttBloc extends Bloc<MqttEvent, MqttState> {
     final String response =
     await rootBundle.loadString('assets/config.json');
     final data = await json.decode(response);
-    print(data);
   }
 }

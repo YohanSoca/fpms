@@ -3,6 +3,12 @@ part of 'mqtt_bloc.dart';
 // Define states
 class MqttState {}
 
+class UpdateTokenState extends MqttState {
+  final String token;
+
+  UpdateTokenState(this.token);
+}
+
 class UpdateCredentialsState extends MqttState {
   final String username;
   final String password;

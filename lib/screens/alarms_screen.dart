@@ -20,40 +20,29 @@ class _AlarmsScreenState extends State<AlarmsScreen> {
         body: BlocBuilder<MqttBloc, MqttState>(
           builder: (context, message) => mqttBloc.state is MessageReceivedState
               ? SingleChildScrollView(
-                  child: Column(
-                  children: [
-                    Container(
-                      child: Column(
-                        children: [
-                          Container(
-                            margin: EdgeInsets.all(16),
-                            padding: EdgeInsets.all(16),
-                            decoration: BoxDecoration(
-                                color: mqttBloc.fpms.port.alarms.lowVoltage
-                                    ? Colors.red
-                                    : Colors.green),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Text("Shore A Voltage"),
-                                Text(
-                                    "${mqttBloc.fpms.port.alarms.lowVoltage ? "is Too Low" : "OK"}")
-                              ],
-                            ),
-                          )
-                        ],
-                      ),
-                    )
-                  ],
-                ))
-              : Center(
-                  child: Column(
-                    children: const [
-                      CircularProgressIndicator(color: Colors.orange),
-                      Text(
-                          "Please check to setup if loading takes more than 3 seconds")
-                    ],
-                  ),
+                  child: mqttBloc.fpms.pms.alarms.general.length > 0 ? Column(
+                  children: mqttBloc.fpms.pms.alarms.general.map((alarm) {
+                    return Container(
+                      padding: EdgeInsets.all(8),
+                      child: alarm["active"] ? Container(
+                        height: 50,
+                        decoration: BoxDecoration(borderRadius: BorderRadius.all(Radius.circular(20))),
+                        child: Card(
+                          color: Colors.red,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text("${alarm["name"]}"),
+                              Icon(Icons.notifications_active)
+                            ],
+                          ),
+                        ),
+                      ) : const SizedBox(),
+                    );
+                  }).toList(),
+                ) : Text('No alarms'))
+              : const Center(
+                  child: CircularProgressIndicator(color: Colors.orange),
                 ),
         ));
   }

@@ -127,7 +127,7 @@ class Pms {
   Map<String, bool> status;
   Requests requests;
   PmsFeedback feedback;
-  Map<String, bool> alarms;
+  PmsAlarms alarms;
   Logs logs;
 
   Pms({
@@ -150,7 +150,7 @@ class Pms {
     Map<String, bool>? status,
     Requests? requests,
     PmsFeedback? feedback,
-    Map<String, bool>? alarms,
+    PmsAlarms? alarms,
     Logs? logs,
   }) =>
       Pms(
@@ -177,7 +177,7 @@ class Pms {
     status: Map.from(json["status"]).map((k, v) => MapEntry<String, bool>(k, v)),
     requests: Requests.fromJson(json["requests"]),
     feedback: PmsFeedback.fromJson(json["feedback"]),
-    alarms: Map.from(json["alarms"]).map((k, v) => MapEntry<String, bool>(k, v)),
+    alarms: PmsAlarms.fromJson(json["alarms"]),
     logs: Logs.fromJson(json["logs"]),
   );
 
@@ -189,8 +189,107 @@ class Pms {
     "status": Map.from(status).map((k, v) => MapEntry<String, dynamic>(k, v)),
     "requests": requests.toJson(),
     "feedback": feedback.toJson(),
-    "alarms": Map.from(alarms).map((k, v) => MapEntry<String, dynamic>(k, v)),
+    "alarms": alarms.toJson(),
     "logs": logs.toJson(),
+  };
+}
+
+class PmsAlarms {
+  bool buzzer;
+  bool buzzerMute;
+  bool outOfPhase;
+  bool protection;
+  bool loadShedding1;
+  bool loadShedding2;
+  bool circulatingCurrent;
+  bool overloadCurrent;
+  bool circulatingVoltage;
+  bool seriesBlocked;
+  bool parallelBloced;
+  bool boardTemperature;
+  List<dynamic> general;
+
+  PmsAlarms({
+    required this.buzzer,
+    required this.buzzerMute,
+    required this.outOfPhase,
+    required this.protection,
+    required this.loadShedding1,
+    required this.loadShedding2,
+    required this.circulatingCurrent,
+    required this.overloadCurrent,
+    required this.circulatingVoltage,
+    required this.seriesBlocked,
+    required this.parallelBloced,
+    required this.boardTemperature,
+    required this.general,
+  });
+
+  PmsAlarms copyWith({
+    bool? buzzer,
+    bool? buzzerMute,
+    bool? outOfPhase,
+    bool? protection,
+    bool? loadShedding1,
+    bool? loadShedding2,
+    bool? circulatingCurrent,
+    bool? overloadCurrent,
+    bool? circulatingVoltage,
+    bool? seriesBlocked,
+    bool? parallelBloced,
+    bool? boardTemperature,
+    List<dynamic>? general,
+  }) =>
+      PmsAlarms(
+        buzzer: buzzer ?? this.buzzer,
+        buzzerMute: buzzerMute ?? this.buzzerMute,
+        outOfPhase: outOfPhase ?? this.outOfPhase,
+        protection: protection ?? this.protection,
+        loadShedding1: loadShedding1 ?? this.loadShedding1,
+        loadShedding2: loadShedding2 ?? this.loadShedding2,
+        circulatingCurrent: circulatingCurrent ?? this.circulatingCurrent,
+        overloadCurrent: overloadCurrent ?? this.overloadCurrent,
+        circulatingVoltage: circulatingVoltage ?? this.circulatingVoltage,
+        seriesBlocked: seriesBlocked ?? this.seriesBlocked,
+        parallelBloced: parallelBloced ?? this.parallelBloced,
+        boardTemperature: boardTemperature ?? this.boardTemperature,
+        general: general ?? this.general,
+      );
+
+  factory PmsAlarms.fromRawJson(String str) => PmsAlarms.fromJson(json.decode(str));
+
+  String toRawJson() => json.encode(toJson());
+
+  factory PmsAlarms.fromJson(Map<String, dynamic> json) => PmsAlarms(
+    buzzer: json["buzzer"],
+    buzzerMute: json["buzzer_mute"],
+    outOfPhase: json["out_of_phase"],
+    protection: json["protection"],
+    loadShedding1: json["load_shedding_1"],
+    loadShedding2: json["load_shedding_2"],
+    circulatingCurrent: json["circulating_current"],
+    overloadCurrent: json["overload_current"],
+    circulatingVoltage: json["circulating_voltage"],
+    seriesBlocked: json["series_blocked"],
+    parallelBloced: json["parallel_bloced"],
+    boardTemperature: json["board_temperature"],
+    general: List<dynamic>.from(json["general"].map((x) => x)),
+  );
+
+  Map<String, dynamic> toJson() => {
+    "buzzer": buzzer,
+    "buzzer_mute": buzzerMute,
+    "out_of_phase": outOfPhase,
+    "protection": protection,
+    "load_shedding_1": loadShedding1,
+    "load_shedding_2": loadShedding2,
+    "circulating_current": circulatingCurrent,
+    "overload_current": overloadCurrent,
+    "circulating_voltage": circulatingVoltage,
+    "series_blocked": seriesBlocked,
+    "parallel_bloced": parallelBloced,
+    "board_temperature": boardTemperature,
+    "general": List<dynamic>.from(general.map((x) => x)),
   };
 }
 
@@ -285,22 +384,26 @@ class Logs {
   List<dynamic> errorLogs;
   List<dynamic> eventLogs;
   List<dynamic> alarmLogs;
+  List<dynamic> general;
 
   Logs({
     required this.errorLogs,
     required this.eventLogs,
     required this.alarmLogs,
+    required this.general,
   });
 
   Logs copyWith({
     List<dynamic>? errorLogs,
     List<dynamic>? eventLogs,
     List<dynamic>? alarmLogs,
+    List<dynamic>? general,
   }) =>
       Logs(
         errorLogs: errorLogs ?? this.errorLogs,
         eventLogs: eventLogs ?? this.eventLogs,
         alarmLogs: alarmLogs ?? this.alarmLogs,
+        general: general ?? this.general,
       );
 
   factory Logs.fromRawJson(String str) => Logs.fromJson(json.decode(str));
@@ -311,12 +414,14 @@ class Logs {
     errorLogs: List<dynamic>.from(json["error_logs"].map((x) => x)),
     eventLogs: List<dynamic>.from(json["event_logs"].map((x) => x)),
     alarmLogs: List<dynamic>.from(json["alarm_logs"].map((x) => x)),
+    general: List<dynamic>.from(json["general"].map((x) => x)),
   );
 
   Map<String, dynamic> toJson() => {
     "error_logs": List<dynamic>.from(errorLogs.map((x) => x)),
     "event_logs": List<dynamic>.from(eventLogs.map((x) => x)),
     "alarm_logs": List<dynamic>.from(alarmLogs.map((x) => x)),
+    "general": List<dynamic>.from(general.map((x) => x)),
   };
 }
 
@@ -560,7 +665,7 @@ class Port {
   List<dynamic> meters;
   PortStatus status;
   PortFeedback feedback;
-  Alarms alarms;
+  PortAlarms alarms;
 
   Port({
     required this.name,
@@ -577,7 +682,7 @@ class Port {
     List<dynamic>? meters,
     PortStatus? status,
     PortFeedback? feedback,
-    Alarms? alarms,
+    PortAlarms? alarms,
   }) =>
       Port(
         name: name ?? this.name,
@@ -598,7 +703,7 @@ class Port {
     meters: List<dynamic>.from(json["meters"].map((x) => x)),
     status: PortStatus.fromJson(json["status"]),
     feedback: PortFeedback.fromJson(json["feedback"]),
-    alarms: Alarms.fromJson(json["alarms"]),
+    alarms: PortAlarms.fromJson(json["alarms"]),
   );
 
   Map<String, dynamic> toJson() => {
@@ -611,7 +716,7 @@ class Port {
   };
 }
 
-class Alarms {
+class PortAlarms {
   bool buzzer;
   bool lowVoltage;
   bool highVoltate;
@@ -622,7 +727,7 @@ class Alarms {
   bool waitingAlarm;
   bool thyristorPower;
 
-  Alarms({
+  PortAlarms({
     required this.buzzer,
     required this.lowVoltage,
     required this.highVoltate,
@@ -634,7 +739,7 @@ class Alarms {
     required this.thyristorPower,
   });
 
-  Alarms copyWith({
+  PortAlarms copyWith({
     bool? buzzer,
     bool? lowVoltage,
     bool? highVoltate,
@@ -645,7 +750,7 @@ class Alarms {
     bool? waitingAlarm,
     bool? thyristorPower,
   }) =>
-      Alarms(
+      PortAlarms(
         buzzer: buzzer ?? this.buzzer,
         lowVoltage: lowVoltage ?? this.lowVoltage,
         highVoltate: highVoltate ?? this.highVoltate,
@@ -657,11 +762,11 @@ class Alarms {
         thyristorPower: thyristorPower ?? this.thyristorPower,
       );
 
-  factory Alarms.fromRawJson(String str) => Alarms.fromJson(json.decode(str));
+  factory PortAlarms.fromRawJson(String str) => PortAlarms.fromJson(json.decode(str));
 
   String toRawJson() => json.encode(toJson());
 
-  factory Alarms.fromJson(Map<String, dynamic> json) => Alarms(
+  factory PortAlarms.fromJson(Map<String, dynamic> json) => PortAlarms(
     buzzer: json["buzzer"],
     lowVoltage: json["low_voltage"],
     highVoltate: json["high_voltate"],
@@ -896,7 +1001,7 @@ class Shore {
   List<dynamic> meters;
   ShoreAStatus status;
   PortFeedback feedback;
-  Alarms alarms;
+  PortAlarms alarms;
 
   Shore({
     required this.name,
@@ -913,7 +1018,7 @@ class Shore {
     List<dynamic>? meters,
     ShoreAStatus? status,
     PortFeedback? feedback,
-    Alarms? alarms,
+    PortAlarms? alarms,
   }) =>
       Shore(
         name: name ?? this.name,
@@ -934,7 +1039,7 @@ class Shore {
     meters: List<dynamic>.from(json["meters"].map((x) => x)),
     status: ShoreAStatus.fromJson(json["status"]),
     feedback: PortFeedback.fromJson(json["feedback"]),
-    alarms: Alarms.fromJson(json["alarms"]),
+    alarms: PortAlarms.fromJson(json["alarms"]),
   );
 
   Map<String, dynamic> toJson() => {

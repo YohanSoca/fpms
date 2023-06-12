@@ -28,7 +28,7 @@ class _PortGenScreenState extends State<PortGenScreen> {
 
     return Scaffold(
         appBar: AppBar(
-          title: Text('PORT Gen'),
+          title: const Text('PORT Gen'),
         ),
         body: BlocBuilder<MqttBloc, MqttState>(
           builder: (context, message) => mqttBloc.state is MessageReceivedState
@@ -43,7 +43,7 @@ class _PortGenScreenState extends State<PortGenScreen> {
                             children: [
                               Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
+                                children: const [
                                   Padding(
                                     padding: EdgeInsets.all(16),
                                     child: Text(
@@ -67,14 +67,14 @@ class _PortGenScreenState extends State<PortGenScreen> {
                                   Padding(
                                     padding: EdgeInsets.all(16),
                                     child: Text(
-                                      "${mqttBloc.fpms.port.meters[0]}V",
+                                      "${mqttBloc.fpms.port.meters[1]}A",
                                       style: TextStyle(fontSize: 36),
                                     ),
                                   ),
                                   Padding(
                                     padding: EdgeInsets.all(16),
                                     child: Text(
-                                      "${mqttBloc.fpms.port.meters[0]}V",
+                                      "${mqttBloc.fpms.port.meters[2]}Hz",
                                       style: TextStyle(fontSize: 36),
                                     ),
                                   )

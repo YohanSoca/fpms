@@ -6,6 +6,7 @@ import 'package:meta/meta.dart';
 import 'dart:convert';
 
 class Config {
+  bool initialConfig;
   String username;
   String email;
   String password;
@@ -14,10 +15,11 @@ class Config {
   int mqttServerPort;
   String mqttUsername;
   String mqttPassword;
-  List<String> mqttTopics;
+  List<dynamic> mqttTopics;
   int profile;
 
   Config({
+    required this.initialConfig,
     required this.username,
     required this.email,
     required this.password,
@@ -31,6 +33,7 @@ class Config {
   });
 
   Config copyWith({
+    bool? initialConfig,
     String? username,
     String? email,
     String? password,
@@ -39,10 +42,11 @@ class Config {
     int? mqttServerPort,
     String? mqttUsername,
     String? mqttPassword,
-    List<String>? mqttTopics,
+    List<dynamic>? mqttTopics,
     int? profile,
   }) =>
       Config(
+        initialConfig: initialConfig ?? this.initialConfig,
         username: username ?? this.username,
         email: email ?? this.email,
         password: password ?? this.password,
@@ -60,6 +64,7 @@ class Config {
   String toRawJson() => json.encode(toJson());
 
   factory Config.fromJson(Map<String, dynamic> json) => Config(
+    initialConfig: json["initial_config"],
     username: json["username"],
     email: json["email"],
     password: json["password"],
@@ -68,11 +73,12 @@ class Config {
     mqttServerPort: json["mqtt_server_port"],
     mqttUsername: json["mqtt_username"],
     mqttPassword: json["mqtt_password"],
-    mqttTopics: List<String>.from(json["mqtt_topics"].map((x) => x)),
+    mqttTopics: List<dynamic>.from(json["mqtt_topics"].map((x) => x)),
     profile: json["profile"],
   );
 
   Map<String, dynamic> toJson() => {
+    "initial_config": initialConfig,
     "username": username,
     "email": email,
     "password": password,

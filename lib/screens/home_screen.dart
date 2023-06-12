@@ -1,22 +1,12 @@
 import 'dart:async';
-import 'dart:typed_data';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fpms/bloc/mqtt_bloc.dart';
-import 'package:fpms/models/fpms.dart';
 import 'package:fpms/screens/port_gen_screen.dart';
-import 'package:fpms/screens/setup_screen.dart';
 import 'package:fpms/screens/shore_a_screen.dart';
 import 'package:fpms/screens/shore_b_screen.dart';
 import 'package:fpms/screens/stbd_gen_screen.dart';
 import 'dart:math' as math;
-import 'package:mqtt_client/mqtt_client.dart';
-import 'package:provider/provider.dart';
-
-import '../models/payload.dart';
-import '../mqtt/mqtt_handler.dart';
-import '../utils/utils.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -27,7 +17,6 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
   late AnimationController animationController;
-  int _counter = 0;
 
   late Timer timer;
 
@@ -49,8 +38,8 @@ class LandscapeHomeScreen extends StatefulWidget {
 class _LandscapeHomeScreenState extends State<LandscapeHomeScreen> {
   @override
   Widget build(BuildContext context) {
-    var available_height = MediaQuery.of(context).size.height;
-    var available_width = MediaQuery.of(context).size.width;
+    var availableHeight = MediaQuery.of(context).size.height;
+    var availableWidth = MediaQuery.of(context).size.width;
 
     final mqttBloc = BlocProvider.of<MqttBloc>(context);
 
@@ -133,8 +122,8 @@ class _LandscapeHomeScreenState extends State<LandscapeHomeScreen> {
                                     ),
                                   ],
                                 ),
-                                width: available_width / 5,
-                                height: available_height / 4,
+                                width: availableWidth / 5,
+                                height: availableHeight / 4,
                                 child: Row(
                                   mainAxisAlignment:
                                       MainAxisAlignment.spaceBetween,
@@ -215,8 +204,8 @@ class _LandscapeHomeScreenState extends State<LandscapeHomeScreen> {
                                     ),
                                   ],
                                 ),
-                                width: available_width / 5,
-                                height: available_height / 4,
+                                width: availableWidth / 5,
+                                height: availableHeight / 4,
                                 child: Row(
                                   mainAxisAlignment:
                                       MainAxisAlignment.spaceBetween,
@@ -395,8 +384,8 @@ class _LandscapeHomeScreenState extends State<LandscapeHomeScreen> {
                                     ),
                                   ],
                                 ),
-                                width: available_width / 4.8,
-                                height: available_height / 4,
+                                width: availableWidth / 4.8,
+                                height: availableHeight / 4,
                                 child: Row(
                                   mainAxisAlignment:
                                       MainAxisAlignment.spaceBetween,
@@ -477,8 +466,8 @@ class _LandscapeHomeScreenState extends State<LandscapeHomeScreen> {
                                     ),
                                   ],
                                 ),
-                                width: available_width / 4.8,
-                                height: available_height / 4,
+                                width: availableWidth / 4.8,
+                                height: availableHeight / 4,
                                 child: Row(
                                   mainAxisAlignment:
                                       MainAxisAlignment.spaceBetween,
@@ -525,7 +514,7 @@ class _LandscapeHomeScreenState extends State<LandscapeHomeScreen> {
             )
           : Center(
               child: Column(
-                children: [
+                children: const [
                   CircularProgressIndicator(color: Colors.orange),
                   Text(
                       "Please check to setup if loading takes more than 3 seconds")

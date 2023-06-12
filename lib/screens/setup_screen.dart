@@ -1,5 +1,4 @@
 import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -53,14 +52,14 @@ class _SetupScreenState extends State<SetupScreen> {
     final configBloc = BlocProvider.of<ConfigBloc>(context);
 
     return Scaffold(
-      appBar: AppBar(title: Text("Setup Page"),),
+      appBar: AppBar(title: Text("Setup"),),
       body: BlocBuilder<MqttBloc, MqttState>(builder: (context, message) => SingleChildScrollView(
         child: BlocBuilder<ConfigBloc, ConfigState>(
             builder: (context, message) => SingleChildScrollView(
               child: Center(
                   child: Container(
                     width: 350,
-                    height: 400,
+                    height: 500,
                     padding: EdgeInsets.all(16),
                     child: Card(
                       elevation: 16,
@@ -68,8 +67,8 @@ class _SetupScreenState extends State<SetupScreen> {
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: [
                           const SizedBox(height: 30,),
-                          mqttBloc.state is DisconnectedState ? ElevatedButton(
-                            child: const Text("Select QR"),
+                          ElevatedButton(
+                            child: const Text("Browse QR"),
                             onPressed: () async {
                               XFile? res = await picker.pickImage(source: ImageSource.gallery);
                               if (res != null) {
@@ -94,18 +93,20 @@ class _SetupScreenState extends State<SetupScreen> {
                                 }
                               }
                             },
-                          ) : Container(),
+                          ),
                           mqttBloc.state is MessageReceivedState ?
                           Column(
                             children: [
+                              Text("${mqttBloc.fpms.mobileApp.token.length > 10 ?
+                              "App registered" : "Not registered yet"}", style: TextStyle(fontSize: 22),),
                               Text("${(DateTime.now().millisecondsSinceEpoch - mqttBloc.fpms.pmsServer.lastUpdate)  / 1000 < 5 ?
-                              "FPMS online" : "FPMS offline"}", style: TextStyle(fontSize: 26),),
+                              "FPMS online" : "FPMS offline"}", style: TextStyle(fontSize: 22),),
                               SizedBox(height: 20,),
-                              Text("Connected", style: TextStyle(fontSize: 26),),
+                              Text("Connected", style: TextStyle(fontSize: 22),),
                               Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
-                                  Text("Server Heartbeat"),
+                                  Text("Server Heartbeat", style: TextStyle(fontSize: 22),),
                                   Container(
                                     margin: EdgeInsets.only(left: 20),
                                     decoration: BoxDecoration(
@@ -121,7 +122,7 @@ class _SetupScreenState extends State<SetupScreen> {
                               Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
-                                  Text("fpms Heartbeat"),
+                                  Text("FPMS Heartbeat", style: TextStyle(fontSize: 22),),
                                   Container(
                                     margin: EdgeInsets.only(left: 20),
                                     decoration: BoxDecoration(

@@ -3,6 +3,12 @@ part of 'mqtt_bloc.dart';
 // Define events
 abstract class MqttEvent {}
 
+class UpdateTokenEvent extends MqttEvent {
+  final String token;
+
+  UpdateTokenEvent(this.token);
+}
+
 class UpdateCredentialsEvent extends MqttEvent {
   final String username;
   final String password;

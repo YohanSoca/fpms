@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fpms/bloc/mqtt_bloc.dart';
 
 import '../models/settings_categories.dart';
 import '../utils/utils.dart';
@@ -22,48 +24,158 @@ class _StbdGenScreenState extends State<StbdGenScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final mqttBloc = BlocProvider.of<MqttBloc>(context);
+
     return Scaffold(
-        appBar: AppBar(title: Text('STBD Gen'),),
-        body:  Container(
-          margin: EdgeInsets.all(16),
-          child: GridView.builder(
-            itemCount: _categories.length,
-            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 3),
-            itemBuilder: (context, index) {
-              return TileCategory(_categories[index]);
-            },
-          ),
-        )
-    );
+        appBar: AppBar(
+          title: Text('STBD Gen'),
+        ),
+        body: BlocBuilder<MqttBloc, MqttState>(
+          builder: (context, message) => mqttBloc.state is MessageReceivedState
+              ? SingleChildScrollView(
+                  child: Column(
+                  children: [
+                    Container(
+                        padding: EdgeInsets.all(8),
+                        height: 200,
+                        child: Card(
+                          child: Column(
+                            children: [
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Padding(
+                                    padding: EdgeInsets.all(16),
+                                    child: Text(
+                                      "Meters",
+                                      style: TextStyle(fontSize: 30),
+                                    ),
+                                  )
+                                ],
+                              ),
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceAround,
+                                children: [
+                                  Padding(
+                                    padding: EdgeInsets.all(16),
+                                    child: Text(
+                                      "${mqttBloc.fpms.stbd.meters[0]}V",
+                                      style: TextStyle(fontSize: 36),
+                                    ),
+                                  ),
+                                  Padding(
+                                    padding: EdgeInsets.all(16),
+                                    child: Text(
+                                      "${mqttBloc.fpms.stbd.meters[1]}A",
+                                      style: TextStyle(fontSize: 36),
+                                    ),
+                                  ),
+                                  Padding(
+                                    padding: EdgeInsets.all(16),
+                                    child: Text(
+                                      "${mqttBloc.fpms.stbd.meters[2]}Hz",
+                                      style: TextStyle(fontSize: 36),
+                                    ),
+                                  )
+                                ],
+                              )
+                            ],
+                          ),
+                        )),
+                    Container(
+                      padding: EdgeInsets.all(8),
+                      child: Card(
+                        child: Column(
+                          children: [
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Padding(
+                                  padding: EdgeInsets.all(16),
+                                  child: ElevatedButton(
+                                    onLongPress: () {},
+                                    onPressed: () {},
+                                    child: Text("START"),
+                                  ),
+                                ),
+                                Padding(
+                                  padding: EdgeInsets.all(16),
+                                  child: ElevatedButton(
+                                    onLongPress: () {},
+                                    onPressed: () {},
+                                    child: Text("CLOSE"),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                    Container(
+                      padding: EdgeInsets.all(8),
+                      height: 300,
+                      child: Card(
+                        child: Column(
+                          children: [
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: const [
+                                Padding(
+                                  padding: EdgeInsets.all(16),
+                                  child: Text(
+                                    "Alarms",
+                                    style: TextStyle(fontSize: 30),
+                                  ),
+                                )
+                              ],
+                            )
+                          ],
+                        ),
+                      ),
+                    )
+                  ],
+                ))
+              : Center(
+                  child: Column(
+                    children: const [
+                      CircularProgressIndicator(color: Colors.orange),
+                      Text(
+                          "Please check to setup if loading takes more than 3 seconds")
+                    ],
+                  ),
+                ),
+        ));
   }
 }
 
 class TileCategory extends StatelessWidget {
   final SettingCategory _category;
+
   const TileCategory(this._category, {Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Card(
         child: InkWell(
-          borderRadius: BorderRadius.circular(4.0),
-          onTap: () {
-            _navigateToBooksWithCategory(context, _category);
-          },
-          child: Container(
-              alignment: AlignmentDirectional.center ,
-              decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(4.0),
-                  color: hexToColor(_category.colorBg)
-              ),
-              child: Text(
-                _category.name,
-                style: Theme.of(context).textTheme.headline5,
-                textAlign: TextAlign.center,)),
-        ));
+      borderRadius: BorderRadius.circular(4.0),
+      onTap: () {
+        _navigateToBooksWithCategory(context, _category);
+      },
+      child: Container(
+          alignment: AlignmentDirectional.center,
+          decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(4.0),
+              color: hexToColor(_category.colorBg)),
+          child: Text(
+            _category.name,
+            style: Theme.of(context).textTheme.headline5,
+            textAlign: TextAlign.center,
+          )),
+    ));
   }
 
-  void _navigateToBooksWithCategory(BuildContext context, SettingCategory category) {
-
-  }
+  void _navigateToBooksWithCategory(
+      BuildContext context, SettingCategory category) {}
 }

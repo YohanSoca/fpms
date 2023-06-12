@@ -211,12 +211,14 @@
         "circulating_voltage": false,
         "series_blocked": false,
         "parallel_bloced": false,
-        "board_temperature": false
+        "board_temperature": false,
+        "general": []
     },
     "logs": {
         "error_logs": [],
         "event_logs": [],
-        "alarm_logs": []
-        }
+        "alarm_logs": [],
+        "general": []
+    }
     }
 }

@@ -4,7 +4,6 @@ import 'package:fpms/screens/logs_screen.dart';
 import 'package:fpms/screens/setup_screen.dart';
 import '../models/settings_categories.dart';
 import '../utils/utils.dart';
-import 'developer_screen.dart';
 import 'modes_screen.dart';
 
 class SettingScreen extends StatefulWidget {

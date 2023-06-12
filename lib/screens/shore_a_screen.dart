@@ -43,7 +43,7 @@ class _ShoreAScreenState extends State<ShoreAScreen> {
                           children: [
                             Row(
                               mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
+                              children: const [
                                 Padding(
                                   padding: EdgeInsets.all(16),
                                   child: Text(

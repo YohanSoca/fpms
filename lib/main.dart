@@ -5,7 +5,9 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fpms/models/config_file.dart';
 import 'package:http/http.dart' as http;
 
 
@@ -74,7 +76,7 @@ class _FastPMSAppState extends State<FastPMSApp> {
         providers: [
           ChangeNotifierProvider(create: ((context) => LightDarkProvider())),
         ],
-        child: MainApp()
+        child: MainApp(token)
     );
   }
 
@@ -165,14 +167,16 @@ class _FastPMSAppState extends State<FastPMSApp> {
 }
 
 class MainApp extends StatelessWidget {
-  const MainApp({Key? key}) : super(key: key);
+  final String token;
+
+  const MainApp(this.token, {Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: Scaffold(
-        bottomNavigationBar: const BottomNavigationWidget(),
+        bottomNavigationBar: BottomNavigationWidget(token),
       ),
     );
   }
@@ -180,7 +184,9 @@ class MainApp extends StatelessWidget {
 
 
 class BottomNavigationWidget extends StatefulWidget {
-  const BottomNavigationWidget({Key? key}) : super(key: key);
+  final String token;
+
+  const BottomNavigationWidget(this.token, {Key? key}) : super(key: key);
 
   @override
   State<BottomNavigationWidget> createState() => _BottomNavigationWidgetState();
@@ -188,6 +194,7 @@ class BottomNavigationWidget extends StatefulWidget {
 
 class _BottomNavigationWidgetState extends State<BottomNavigationWidget> {
   int _selectedIndex = 0;
+  late Config _config;
 
   static const List<Widget> _selections = [
     HomeScreen(),
@@ -196,8 +203,17 @@ class _BottomNavigationWidgetState extends State<BottomNavigationWidget> {
   @override
   Widget build(BuildContext context) {
     final mqttBloc = BlocProvider.of<MqttBloc>(context);
+    mqttBloc.add(UpdateTokenEvent(widget.token));
 
     final themeProvider = Provider.of<LightDarkProvider>(context);
+    readJson();
+    if(false) {
+      mqttBloc.add(UpdateServerEvent("24.199.84.80"));
+      mqttBloc.add(UpdatePortEvent(1883));
+      mqttBloc.add(UpdateTopicEvent("fpms"));
+      mqttBloc.add(UpdateCredentialsEvent("nauti-tech", "N2u^!T&%*"));
+      mqttBloc.add(ConnectEvent());
+    }
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       theme: themeProvider.getTheme(),
@@ -234,6 +250,12 @@ class _BottomNavigationWidgetState extends State<BottomNavigationWidget> {
     setState(() {
       _selectedIndex = value;
     });
+  }
+  Future<void> readJson() async {
+    final String response =
+    await rootBundle.loadString('assets/config.json');
+    final data = await json.decode(response);
+    _config = Config.fromJson(data);
   }
 }
 
