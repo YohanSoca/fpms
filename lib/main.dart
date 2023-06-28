@@ -1,13 +1,15 @@
 import 'dart:convert';
+import 'dart:ffi';
+import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fpms/models/config_file.dart';
+import 'package:fpms/screens/notifications_screen.dart';
 import 'package:http/http.dart' as http;
 
 
@@ -15,9 +17,9 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:fpms/firebase_options.dart';
 import 'package:fpms/providers/light_dark_provider.dart';
 import 'package:fpms/screens/auth_screen.dart';
-import 'package:fpms/screens/setup_screen.dart';
 import 'package:fpms/screens/home_screen.dart';
 import 'package:fpms/screens/settings_screen.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
 
 import 'bloc/mqtt_bloc.dart';
@@ -43,7 +45,7 @@ Future <void> main() async {
       options: DefaultFirebaseOptions.currentPlatform
   );
 
-  runApp(MaterialApp(
+  runApp(const MaterialApp(
     debugShowCheckedModeBanner: false,
     home: AuthPage(),
   ));
@@ -63,7 +65,6 @@ class _FastPMSAppState extends State<FastPMSApp> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     requestPermission();
     getToken();
@@ -198,22 +199,49 @@ class _BottomNavigationWidgetState extends State<BottomNavigationWidget> {
 
   static const List<Widget> _selections = [
     HomeScreen(),
+    NotificationsScreen(),
     SettingScreen()
   ];
+  late Config config;
+  late File jsonFile;
+  late Directory dir;
+  String fileName = "config.json";
+  bool fileExists = false;
+  late Map<String, dynamic> fileContent;
+
+  @override
+  void initState() {
+    super.initState();
+    getApplicationDocumentsDirectory().then((Directory directory) {
+      dir = directory;
+      jsonFile = File(dir.path + "/" + fileName);
+      fileExists = jsonFile.existsSync();
+      if(fileExists) {
+        setState(() {
+          fileContent = json.decode(jsonFile.readAsStringSync());
+          config = Config.fromRawJson(jsonFile.readAsStringSync());
+        });
+      }
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     final mqttBloc = BlocProvider.of<MqttBloc>(context);
     mqttBloc.add(UpdateTokenEvent(widget.token));
 
     final themeProvider = Provider.of<LightDarkProvider>(context);
-    readJson();
-    if(false) {
-      mqttBloc.add(UpdateServerEvent("24.199.84.80"));
-      mqttBloc.add(UpdatePortEvent(1883));
-      mqttBloc.add(UpdateTopicEvent("fpms"));
-      mqttBloc.add(UpdateCredentialsEvent("nauti-tech", "N2u^!T&%*"));
+
+    if(fileExists && mqttBloc.state is DisconnectedState) {
+      mqttBloc.add(ConnectingEvent());
+      mqttBloc.add(UpdateServerEvent(config.mqttServerUri));
+      mqttBloc.add(UpdatePortEvent(config.mqttServerPort));
+      mqttBloc.add(UpdateCredentialsEvent(config.mqttUsername, config.mqttPassword));
+      mqttBloc.add(UpdateTopicEvent(config.mqttTopic));
       mqttBloc.add(ConnectEvent());
     }
+
+
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       theme: themeProvider.getTheme(),
@@ -223,7 +251,7 @@ class _BottomNavigationWidgetState extends State<BottomNavigationWidget> {
               actions: [
                 mqttBloc.state is MessageReceivedState ?
                 (DateTime.now().millisecondsSinceEpoch - mqttBloc.fpms.pmsServer.lastUpdate < 10000 ? Icon(Icons.link) : Icon(Icons.link_off)) : Icon(Icons.link_off),
-                SizedBox(width: 20,),
+                const SizedBox(width: 20,),
                 IconButton(onPressed: () {
                   if(themeProvider.darkMode) {
                     themeProvider.setLightMode();
@@ -235,6 +263,7 @@ class _BottomNavigationWidgetState extends State<BottomNavigationWidget> {
             bottomNavigationBar: MediaQuery.of(context).orientation == Orientation.portrait ? BottomNavigationBar(
               items: const [
                 BottomNavigationBarItem(icon: Icon(Icons.home), label: "Home"),
+                BottomNavigationBarItem(icon: Icon(Icons.notifications), label: "Notifications"),
                 BottomNavigationBarItem(icon: Icon(Icons.select_all), label: "Categories")
               ],
               currentIndex: _selectedIndex,

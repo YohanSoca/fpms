@@ -10,43 +10,42 @@ class LogsScreen extends StatefulWidget {
 }
 
 class _LogsScreenState extends State<LogsScreen> {
+  final List<int> colorCodes = <int>[600, 500, 100];
+
   @override
   Widget build(BuildContext context) {
     final mqttBloc = BlocProvider.of<MqttBloc>(context);
 
     return Scaffold(
         appBar: AppBar(
-          title: Text("Logs"),
+          title: const Text("Logs"),
         ),
         body: BlocBuilder<MqttBloc, MqttState>(
           builder: (context, message) => mqttBloc.state is MessageReceivedState
-              ? SingleChildScrollView(
-                  child: Column(
-                  children: mqttBloc.fpms.pms.logs.general.map((log) {
+              ? ListView.separated(
+                  padding: const EdgeInsets.all(8),
+                  itemCount: mqttBloc.fpms.pms.logs.general.length,
+                  itemBuilder: (BuildContext context, int index) {
                     return Container(
-                      height: 120,
-                      width: double.infinity / 1.2,
-                      margin: EdgeInsets.all(6),
-                      child: Card(
-                        child: Column(
-                          children: log["data"].length > 10 ? [
-                            Text("Timestamp: ${log["data"].sublist(0, 4)}", style: TextStyle(fontSize: 20, color: Colors.red),),
-                            Text("Dev, Code: ${log["data"].sublist(4, 6).reversed.toList()}", style: TextStyle(fontSize: 20, color: Colors.red),),
-                            Text("Reg address: ${log["data"].sublist(6, 8).reversed.toList()}", style: TextStyle(fontSize: 20, color: Colors.red),),
-                            Text("Data: ${log["data"].sublist(8, 12).reversed.toList()}", style: TextStyle(fontSize: 20, color: Colors.red),),
-                          ] : [],
-                        )
-                      ),
-                    );
-                  }).toList(),
-                ))
+                        height: 130,
+                        child: Card(
+                          elevation: 16,
+                          color: Colors.amber,
+                          child: Center(
+                              child: Text(
+                            '${mqttBloc.fpms.pms.logs.general[index]}',
+                            textAlign: TextAlign.center,
+                            style: TextStyle(fontSize: 22, color: Colors.black),
+                          )),
+                        ));
+                  },
+                  separatorBuilder: (BuildContext context, int index) =>
+                      const Divider(),
+                )
               : Center(
-                  child: Column(
-                    children: const [
-                      CircularProgressIndicator(color: Colors.orange),
-                      Text(
-                          "Please check to setup if loading takes more than 3 seconds")
-                    ],
+                  child: Text(
+                    "You are not connected, go to setup to connect",
+                    style: TextStyle(fontSize: 26),
                   ),
                 ),
         ));

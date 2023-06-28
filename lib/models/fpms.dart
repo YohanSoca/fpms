@@ -505,6 +505,7 @@ class Settings {
 
 class Modes {
   String name;
+  bool manualAuto;
   bool protection;
   bool ovr;
   bool oneTimeTransfer;
@@ -515,6 +516,7 @@ class Modes {
   bool seamlessTransfer;
   bool nbootsShoreA;
   bool nbootsShoreB;
+  bool series;
   bool preferedSwgear;
   bool singleShoreCombine;
   bool splitBusAutoOff;
@@ -523,6 +525,7 @@ class Modes {
 
   Modes({
     required this.name,
+    required this.manualAuto,
     required this.protection,
     required this.ovr,
     required this.oneTimeTransfer,
@@ -533,6 +536,7 @@ class Modes {
     required this.seamlessTransfer,
     required this.nbootsShoreA,
     required this.nbootsShoreB,
+    required this.series,
     required this.preferedSwgear,
     required this.singleShoreCombine,
     required this.splitBusAutoOff,
@@ -542,6 +546,7 @@ class Modes {
 
   Modes copyWith({
     String? name,
+    bool? manualAuto,
     bool? protection,
     bool? ovr,
     bool? oneTimeTransfer,
@@ -552,6 +557,7 @@ class Modes {
     bool? seamlessTransfer,
     bool? nbootsShoreA,
     bool? nbootsShoreB,
+    bool? series,
     bool? preferedSwgear,
     bool? singleShoreCombine,
     bool? splitBusAutoOff,
@@ -560,6 +566,7 @@ class Modes {
   }) =>
       Modes(
         name: name ?? this.name,
+        manualAuto: manualAuto ?? this.manualAuto,
         protection: protection ?? this.protection,
         ovr: ovr ?? this.ovr,
         oneTimeTransfer: oneTimeTransfer ?? this.oneTimeTransfer,
@@ -570,6 +577,7 @@ class Modes {
         seamlessTransfer: seamlessTransfer ?? this.seamlessTransfer,
         nbootsShoreA: nbootsShoreA ?? this.nbootsShoreA,
         nbootsShoreB: nbootsShoreB ?? this.nbootsShoreB,
+        series: series ?? this.series,
         preferedSwgear: preferedSwgear ?? this.preferedSwgear,
         singleShoreCombine: singleShoreCombine ?? this.singleShoreCombine,
         splitBusAutoOff: splitBusAutoOff ?? this.splitBusAutoOff,
@@ -583,6 +591,7 @@ class Modes {
 
   factory Modes.fromJson(Map<String, dynamic> json) => Modes(
     name: json["name"],
+    manualAuto: json["manual_auto"],
     protection: json["protection"],
     ovr: json["ovr"],
     oneTimeTransfer: json["one_time_transfer"],
@@ -593,6 +602,7 @@ class Modes {
     seamlessTransfer: json["seamless_transfer"],
     nbootsShoreA: json["nboots_shore_a"],
     nbootsShoreB: json["nboots_shore_b"],
+    series: json["series"],
     preferedSwgear: json["prefered_swgear"],
     singleShoreCombine: json["single_shore_combine"],
     splitBusAutoOff: json["split_bus_auto_off"],
@@ -602,6 +612,7 @@ class Modes {
 
   Map<String, dynamic> toJson() => {
     "name": name,
+    "manual_auto": manualAuto,
     "protection": protection,
     "ovr": ovr,
     "one_time_transfer": oneTimeTransfer,
@@ -612,6 +623,7 @@ class Modes {
     "seamless_transfer": seamlessTransfer,
     "nboots_shore_a": nbootsShoreA,
     "nboots_shore_b": nbootsShoreB,
+    "series": series,
     "prefered_swgear": preferedSwgear,
     "single_shore_combine": singleShoreCombine,
     "split_bus_auto_off": splitBusAutoOff,
@@ -837,6 +849,7 @@ class PortFeedback {
 }
 
 class PortStatus {
+  bool precense;
   bool online;
   bool tripped;
   bool contactorRelay;
@@ -846,6 +859,7 @@ class PortStatus {
   bool autoStartPreheat;
 
   PortStatus({
+    required this.precense,
     required this.online,
     required this.tripped,
     required this.contactorRelay,
@@ -856,6 +870,7 @@ class PortStatus {
   });
 
   PortStatus copyWith({
+    bool? precense,
     bool? online,
     bool? tripped,
     bool? contactorRelay,
@@ -865,6 +880,7 @@ class PortStatus {
     bool? autoStartPreheat,
   }) =>
       PortStatus(
+        precense: precense ?? this.precense,
         online: online ?? this.online,
         tripped: tripped ?? this.tripped,
         contactorRelay: contactorRelay ?? this.contactorRelay,
@@ -879,6 +895,7 @@ class PortStatus {
   String toRawJson() => json.encode(toJson());
 
   factory PortStatus.fromJson(Map<String, dynamic> json) => PortStatus(
+    precense: json["precense"],
     online: json["online"],
     tripped: json["tripped"],
     contactorRelay: json["contactor_relay"],
@@ -889,6 +906,7 @@ class PortStatus {
   );
 
   Map<String, dynamic> toJson() => {
+    "precense": precense,
     "online": online,
     "tripped": tripped,
     "contactor_relay": contactorRelay,
@@ -900,6 +918,7 @@ class PortStatus {
 }
 
 class Serial {
+  int packagesReceived;
   bool heartbeat;
   bool wiresReversed;
   String fill;
@@ -908,6 +927,7 @@ class Serial {
   Source source;
 
   Serial({
+    required this.packagesReceived,
     required this.heartbeat,
     required this.wiresReversed,
     required this.fill,
@@ -917,6 +937,7 @@ class Serial {
   });
 
   Serial copyWith({
+    int? packagesReceived,
     bool? heartbeat,
     bool? wiresReversed,
     String? fill,
@@ -925,6 +946,7 @@ class Serial {
     Source? source,
   }) =>
       Serial(
+        packagesReceived: packagesReceived ?? this.packagesReceived,
         heartbeat: heartbeat ?? this.heartbeat,
         wiresReversed: wiresReversed ?? this.wiresReversed,
         fill: fill ?? this.fill,
@@ -938,6 +960,7 @@ class Serial {
   String toRawJson() => json.encode(toJson());
 
   factory Serial.fromJson(Map<String, dynamic> json) => Serial(
+    packagesReceived: json["packages_received"],
     heartbeat: json["heartbeat"],
     wiresReversed: json["wires_reversed"],
     fill: json["fill"],
@@ -947,6 +970,7 @@ class Serial {
   );
 
   Map<String, dynamic> toJson() => {
+    "packages_received": packagesReceived,
     "heartbeat": heartbeat,
     "wires_reversed": wiresReversed,
     "fill": fill,

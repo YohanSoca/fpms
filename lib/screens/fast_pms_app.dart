@@ -23,7 +23,6 @@ class _FastPMSAppState extends State<FastPMSApp> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     requestPermission();
     getToken();

@@ -15,34 +15,37 @@ class _AlarmsScreenState extends State<AlarmsScreen> {
     final mqttBloc = BlocProvider.of<MqttBloc>(context);
     return Scaffold(
         appBar: AppBar(
-          title: Text("Alarms"),
+          title: const Text("Alarms"),
         ),
         body: BlocBuilder<MqttBloc, MqttState>(
           builder: (context, message) => mqttBloc.state is MessageReceivedState
               ? SingleChildScrollView(
-                  child: mqttBloc.fpms.pms.alarms.general.length > 0 ? Column(
+                  child: mqttBloc.fpms.pms.alarms.general.isNotEmpty ? Column(
                   children: mqttBloc.fpms.pms.alarms.general.map((alarm) {
                     return Container(
-                      padding: EdgeInsets.all(8),
+                      padding: const EdgeInsets.all(8),
                       child: alarm["active"] ? Container(
                         height: 50,
-                        decoration: BoxDecoration(borderRadius: BorderRadius.all(Radius.circular(20))),
+                        decoration: const BoxDecoration(borderRadius: BorderRadius.all(Radius.circular(20))),
                         child: Card(
                           color: Colors.red,
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               Text("${alarm["name"]}"),
-                              Icon(Icons.notifications_active)
+                              const Icon(Icons.notifications_active)
                             ],
                           ),
                         ),
                       ) : const SizedBox(),
                     );
                   }).toList(),
-                ) : Text('No alarms'))
+                ) : const Text('No alarms'))
               : const Center(
-                  child: CircularProgressIndicator(color: Colors.orange),
+                  child: Text(
+                    "You are not connected, go to setup to connect",
+                    style: TextStyle(fontSize: 26),
+                  ),
                 ),
         ));
   }

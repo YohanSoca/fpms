@@ -1,6 +1,6 @@
 {
   "initial_config": false,
-  "username": "nauti-tech",
+  "username": "",
   "email": "",
   "password": "",
   "demo": true,
@@ -8,6 +8,6 @@
   "mqtt_server_port": 0,
   "mqtt_username": "",
   "mqtt_password": "",
-  "mqtt_topics": [],
+  "mqtt_topic": "",
   "profile": 0
 }

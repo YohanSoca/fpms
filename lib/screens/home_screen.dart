@@ -44,12 +44,12 @@ class _LandscapeHomeScreenState extends State<LandscapeHomeScreen> {
     final mqttBloc = BlocProvider.of<MqttBloc>(context);
 
     return BlocBuilder<MqttBloc, MqttState>(
-      builder: (context, message) => mqttBloc.state is MessageReceivedState
+      builder: (context, message) => mqttBloc.state is ConnectingState ? Center(child: Text("Connecting..."),) : mqttBloc.state is MessageReceivedState
           ? SingleChildScrollView(
               child: Column(
                 children: [
                   // Header buttons
-                  Row(
+                  Padding(padding: EdgeInsets.only(top: 5), child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Row(
@@ -60,21 +60,21 @@ class _LandscapeHomeScreenState extends State<LandscapeHomeScreen> {
                             height: 60,
                             decoration: const BoxDecoration(
                                 image: DecorationImage(
-                              image: AssetImage("assets/images/Logo.png"),
-                            )),
+                                  image: AssetImage("assets/images/Logo.png"),
+                                )),
                           ),
                           Container(
                             width: 60,
                             height: 30,
                             decoration: const BoxDecoration(
                                 image: DecorationImage(
-                              image: AssetImage("assets/images/alert.png"),
-                            )),
+                                  image: AssetImage("assets/images/alert.png"),
+                                )),
                           )
                         ],
                       ),
                       Text(
-                        'Manual mode ON',
+                        "${mqttBloc.fpms.pms.settings.modes.manualAuto ? "AUTO" : "MANUAL"}",
                         style: TextStyle(fontSize: 20),
                       ),
                       Row(
@@ -84,28 +84,28 @@ class _LandscapeHomeScreenState extends State<LandscapeHomeScreen> {
                             height: 60,
                             decoration: const BoxDecoration(
                                 image: DecorationImage(
-                              image: AssetImage("assets/images/reset.png"),
-                            )),
+                                  image: AssetImage("assets/images/reset.png"),
+                                )),
                           ),
                           Container(
                             width: 80,
                             height: 60,
                             decoration: const BoxDecoration(
                                 image: DecorationImage(
-                              image: AssetImage("assets/images/Logo.png"),
-                            )),
+                                  image: AssetImage("assets/images/Logo.png"),
+                                )),
                           )
                         ],
                       )
                     ],
-                  ),
+                  ),),
                   // Pms layout
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Column(
                         children: [
-                          Row(
+                          mqttBloc.fpms.port.status.precense ? Row(
                             children: [
                               Container(
                                 margin: EdgeInsets.only(left: 0, top: 15),
@@ -186,8 +186,8 @@ class _LandscapeHomeScreenState extends State<LandscapeHomeScreen> {
                                 width: 30,
                               )
                             ],
-                          ),
-                          Row(
+                          ) : SizedBox(width: availableWidth / 5,height: availableHeight / 4,),
+                          mqttBloc.fpms.stbd.status.precense ? Row(
                             children: [
                               Container(
                                 margin: EdgeInsets.only(left: 0, top: 15),
@@ -268,7 +268,7 @@ class _LandscapeHomeScreenState extends State<LandscapeHomeScreen> {
                                 width: 30,
                               )
                             ],
-                          ),
+                          ) : SizedBox(width: availableWidth / 5,height: availableHeight / 4,),
                         ],
                       ),
                       //Main bus A
@@ -342,7 +342,7 @@ class _LandscapeHomeScreenState extends State<LandscapeHomeScreen> {
                       ),
                       Column(
                         children: [
-                          Row(
+                          mqttBloc.fpms.stbd.status.precense ? Row(
                             children: [
                               Container(
                                 color: mqttBloc.fpms.pms.feedback.busBLive
@@ -422,8 +422,8 @@ class _LandscapeHomeScreenState extends State<LandscapeHomeScreen> {
                                 ),
                               ),
                             ],
-                          ),
-                          Row(
+                          ): SizedBox(width: availableWidth / 5,height: availableHeight / 4,),
+                          mqttBloc.fpms.shoreB.status.precense ? Row(
                             children: [
                               Container(
                                 color: mqttBloc.fpms.pms.feedback.busBLive
@@ -504,7 +504,7 @@ class _LandscapeHomeScreenState extends State<LandscapeHomeScreen> {
                                 ),
                               ),
                             ],
-                          ),
+                          ) : SizedBox(width: availableWidth / 5,height: availableHeight / 4,),
                         ],
                       ),
                     ],
@@ -547,8 +547,8 @@ class _PortraitHomeScreenState extends State<PortraitHomeScreen> {
                 SingleChildScrollView(
                   child: Column(
                     children: [
-                      true ? Padding(
-                        padding: EdgeInsets.only(top: 10),
+                      mqttBloc.fpms.port.status.precense ? Padding(
+                        padding: EdgeInsets.only(top: 8),
                         child: Row(
                           children: [
                             InkWell(
@@ -636,9 +636,9 @@ class _PortraitHomeScreenState extends State<PortraitHomeScreen> {
                             )
                           ],
                         ),
-                      ): SizedBox(),
-                      true ? Padding(
-                        padding: EdgeInsets.only(top: 10),
+                      ): SizedBox(height: 130, width: 300,),
+                      mqttBloc.fpms.shoreA.status.precense ? Padding(
+                        padding: EdgeInsets.only(top: 8),
                         child: Row(
                           children: [
                             InkWell(
@@ -740,9 +740,9 @@ class _PortraitHomeScreenState extends State<PortraitHomeScreen> {
                             )
                           ],
                         ),
-                      ): SizedBox(height: 130,),
-                      true ? Padding(
-                        padding: EdgeInsets.only(top: 10),
+                      ): SizedBox(height: 130, width: 300,),
+                      mqttBloc.fpms.stbd.status.precense ? Padding(
+                        padding: EdgeInsets.only(top: 8),
                         child: Row(
                           children: [
                             InkWell(
@@ -830,9 +830,9 @@ class _PortraitHomeScreenState extends State<PortraitHomeScreen> {
                             )
                           ],
                         ),
-                      ): SizedBox(height: 130,),
-                      true ? Padding(
-                        padding: EdgeInsets.only(top: 10),
+                      ): SizedBox(height: 130, width: 300,),
+                      mqttBloc.fpms.shoreB.status.precense ? Padding(
+                        padding: EdgeInsets.only(top: 8),
                         child: Row(
                           children: [
                             InkWell(
@@ -934,7 +934,7 @@ class _PortraitHomeScreenState extends State<PortraitHomeScreen> {
                             )
                           ],
                         ),
-                      ): SizedBox(height: 130,)
+                      ): SizedBox(height: 130, width: 300,),
                     ],
                   ),
                 ),

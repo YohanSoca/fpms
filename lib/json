@@ -11,6 +11,7 @@
         "last_update": 0
     },
     "serial": {
+        "packages_received": 0,
         "heartbeat": false,
         "wires_reversed": false,
         "fill": "red",
@@ -85,6 +86,7 @@
         "image_uri": "generator.png",
         "meters": [],
         "status": {
+            "precense": false,
             "online": false,
             "tripped": false,
             "contactor_relay": false,
@@ -116,6 +118,7 @@
         "image_uri": "generator.png",
         "meters": [],
         "status": {
+            "precense": false,
             "online": false,
             "tripped": false,
             "contactor_relay": false,
@@ -149,6 +152,7 @@
         "settings": {
             "modes": {
                 "name": "fpms modes",
+                "manual_auto": false,
                 "protection": false,
                 "ovr": false,
                 "one_time_transfer": false,
@@ -159,6 +163,7 @@
                 "seamless_transfer": false,
                 "nboots_shore_a": false,
                 "nboots_shore_b": false,
+                "series": false,
                 "prefered_swgear": false,
                 "single_shore_combine": false,
                 "split_bus_auto_off": false,

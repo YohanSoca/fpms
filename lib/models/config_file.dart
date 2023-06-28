@@ -15,7 +15,7 @@ class Config {
   int mqttServerPort;
   String mqttUsername;
   String mqttPassword;
-  List<dynamic> mqttTopics;
+  String mqttTopic;
   int profile;
 
   Config({
@@ -28,7 +28,7 @@ class Config {
     required this.mqttServerPort,
     required this.mqttUsername,
     required this.mqttPassword,
-    required this.mqttTopics,
+    required this.mqttTopic,
     required this.profile,
   });
 
@@ -42,7 +42,7 @@ class Config {
     int? mqttServerPort,
     String? mqttUsername,
     String? mqttPassword,
-    List<dynamic>? mqttTopics,
+    String? mqttTopic,
     int? profile,
   }) =>
       Config(
@@ -55,7 +55,7 @@ class Config {
         mqttServerPort: mqttServerPort ?? this.mqttServerPort,
         mqttUsername: mqttUsername ?? this.mqttUsername,
         mqttPassword: mqttPassword ?? this.mqttPassword,
-        mqttTopics: mqttTopics ?? this.mqttTopics,
+        mqttTopic: mqttTopic ?? this.mqttTopic,
         profile: profile ?? this.profile,
       );
 
@@ -73,7 +73,7 @@ class Config {
     mqttServerPort: json["mqtt_server_port"],
     mqttUsername: json["mqtt_username"],
     mqttPassword: json["mqtt_password"],
-    mqttTopics: List<dynamic>.from(json["mqtt_topics"].map((x) => x)),
+    mqttTopic: json["mqtt_topic"],
     profile: json["profile"],
   );
 
@@ -87,7 +87,7 @@ class Config {
     "mqtt_server_port": mqttServerPort,
     "mqtt_username": mqttUsername,
     "mqtt_password": mqttPassword,
-    "mqtt_topics": List<dynamic>.from(mqttTopics.map((x) => x)),
+    "mqtt_topic": mqttTopic,
     "profile": profile,
   };
 }

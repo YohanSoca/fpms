@@ -51,6 +51,10 @@ class MqttBloc extends Bloc<MqttEvent, MqttState> {
       emit(UpdateServerPortState(event.port));
     });
 
+    on<ConnectingEvent>((event, emit) async {
+      emit(ConnectingState());
+    });
+
     on<ConnectEvent>((event, emit) async {
       //TODO
       if(connected) {

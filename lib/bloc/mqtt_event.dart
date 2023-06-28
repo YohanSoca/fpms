@@ -22,6 +22,8 @@ class DisconnectEvent extends MqttEvent {}
 
 class ConnectEvent extends MqttEvent {}
 
+class ConnectingEvent extends MqttEvent {}
+
 class ConnectedEvent extends MqttEvent {}
 
 class MessageReceivedEvent extends MqttEvent {
